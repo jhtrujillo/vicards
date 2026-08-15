@@ -11,27 +11,6 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto">
-      {/* Green Call-to-action Section */}
-      <div className="bg-[#70970A] py-8 text-center px-4">
-        <h2 className="text-white font-display font-bold text-2xl mb-2">
-          ¿Dónde comprar?
-        </h2>
-        <p className="text-white text-sm md:text-base mb-2 font-medium max-w-2xl mx-auto leading-relaxed">
-          Calidad & Diseño excepcional excepcional en cada uno de nuestros productos<br /><br />
-          Descubre la elegancia en cada rincón.<br />
-          VICAR'S: Redefiniendo el lujo en el hogar.
-        </p>
-        <div className="mt-4">
-          <Link 
-            href="/tienda" 
-            className="inline-flex items-center justify-center bg-white text-primary font-bold py-3 px-8 text-sm hover:bg-gray-50 transition-colors shadow-sm"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"></path></svg>
-            Ir a la tienda
-          </Link>
-        </div>
-      </div>
-
       {/* Main Footer Section */}
       <div className="bg-[#fdfdf7] py-12 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,12 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-export default function Header() {
+export default function Header({ categories = [] }: { categories?: any[] }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,17 +81,40 @@ export default function Header() {
           {/* Right: Actions */}
           <div className="hidden md:flex items-center space-x-6 justify-end">
             {/* Search */}
-            <button className="text-white hover:text-primary transition-colors transform hover:-translate-y-0.5 duration-200">
-              <span className="sr-only">Buscar</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </button>
-            
-            {/* Cart */}
-            <button className="text-white hover:text-primary transition-colors relative group transform hover:-translate-y-0.5 duration-200">
-              <span className="sr-only">Carrito</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-              <span className="absolute -top-2 -right-2 bg-primary text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">0</span>
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                className="text-white hover:text-primary transition-colors transform hover:-translate-y-0.5 duration-200"
+              >
+                <span className="sr-only">Buscar</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </button>
+              
+              {isSearchOpen && (
+                <div className="absolute right-0 mt-4 w-72 bg-white rounded-md shadow-lg border border-gray-100 p-4 z-50">
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    if (searchQuery.trim()) {
+                      router.push(`/tienda?q=${encodeURIComponent(searchQuery.trim())}`);
+                      setIsSearchOpen(false);
+                      setSearchQuery("");
+                    }
+                  }} className="relative">
+                    <input 
+                      type="text" 
+                      placeholder="Buscar muebles, estilos..." 
+                      autoFocus
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary pr-8 text-gray-900"
+                    />
+                    <button type="submit" className="absolute right-2 top-2 text-gray-400 hover:text-primary">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </button>
+                  </form>
+                </div>
+              )}
+            </div>
             
             {/* Contact Button */}
             <Link href="/contacto" className="bg-primary hover:bg-[#96C11F] text-white font-display font-bold uppercase tracking-widest text-[11px] py-2.5 px-6 rounded-md transition-colors shadow-sm transform hover:-translate-y-0.5 duration-200" onMouseEnter={() => setActiveMenu(null)}>
@@ -123,9 +149,15 @@ export default function Header() {
                 <ul className="space-y-4">
                   {activeMenu === 'tienda' && (
                     <>
-                      <li><Link href="/tienda" className="text-gray-600 hover:text-primary font-medium text-sm transition-colors flex items-center gap-3 group/link"><span className="w-8 h-[1px] bg-gray-300 group-hover/link:bg-primary transition-colors group-hover/link:w-12"></span>Ver Todo</Link></li>
-                      <li><Link href="/ofertas" className="text-gray-600 hover:text-primary font-medium text-sm transition-colors flex items-center gap-3 group/link"><span className="w-8 h-[1px] bg-gray-300 group-hover/link:bg-primary transition-colors group-hover/link:w-12"></span>Nuevos Lanzamientos</Link></li>
-                      <li><Link href="/decoracion" className="text-gray-600 hover:text-primary font-medium text-sm transition-colors flex items-center gap-3 group/link"><span className="w-8 h-[1px] bg-gray-300 group-hover/link:bg-primary transition-colors group-hover/link:w-12"></span>Decoración y Arte</Link></li>
+                      <li><Link href="/tienda" className="text-gray-600 hover:text-primary font-medium text-sm transition-colors flex items-center gap-3 group/link"><span className="w-8 h-[1px] bg-gray-300 group-hover/link:bg-primary transition-colors group-hover/link:w-12"></span>Ver Todo el Catálogo</Link></li>
+                      {categories.map((cat) => (
+                        <li key={`link-${cat.id}`}>
+                          <Link href={`/tienda?categoria=${cat.id}`} className="text-gray-600 hover:text-primary font-medium text-sm transition-colors flex items-center gap-3 group/link">
+                            <span className="w-8 h-[1px] bg-gray-300 group-hover/link:bg-primary transition-colors group-hover/link:w-12"></span>
+                            {cat.name}
+                          </Link>
+                        </li>
+                      ))}
                     </>
                   )}
                   {activeMenu === 'nosotros' && (
@@ -149,33 +181,17 @@ export default function Header() {
               <div className="col-span-3 grid grid-cols-3 gap-6">
                 {activeMenu === 'tienda' && (
                   <>
-                    <div className="group/cat cursor-pointer">
-                      <div className="aspect-[16/9] rounded-lg overflow-hidden mb-3 relative shadow-sm">
-                        <img src="/images/DSC02180-scaled.jpg" alt="Salas" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/cat:opacity-100 transition-opacity duration-300"></div>
+                    {categories.slice(0, 3).map((cat) => (
+                      <div key={cat.id} className="group/cat cursor-pointer" onClick={() => { setActiveMenu(null); window.location.href = `/tienda?categoria=${cat.id}`; }}>
+                        <div className="aspect-[16/9] rounded-lg overflow-hidden mb-3 relative shadow-sm bg-gray-100">
+                          <img src={cat.image || "/images/placeholder.jpg"} alt={cat.name} className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/cat:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                        <Link href={`/tienda?categoria=${cat.id}`} className="block text-center" onClick={() => setActiveMenu(null)}>
+                          <h4 className="font-display font-bold text-gray-900 text-base group-hover/cat:text-primary transition-colors">{cat.name}</h4>
+                        </Link>
                       </div>
-                      <Link href="/categoria/salas" className="block text-center">
-                        <h4 className="font-display font-bold text-gray-900 text-base group-hover/cat:text-primary transition-colors">Salas</h4>
-                      </Link>
-                    </div>
-                    <div className="group/cat cursor-pointer">
-                      <div className="aspect-[16/9] rounded-lg overflow-hidden mb-3 relative shadow-sm">
-                        <img src="/images/DSC02223-600x338.jpg" alt="Alcobas" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/cat:opacity-100 transition-opacity duration-300"></div>
-                      </div>
-                      <Link href="/categoria/alcobas" className="block text-center">
-                        <h4 className="font-display font-bold text-gray-900 text-base group-hover/cat:text-primary transition-colors">Alcobas</h4>
-                      </Link>
-                    </div>
-                    <div className="group/cat cursor-pointer">
-                      <div className="aspect-[16/9] rounded-lg overflow-hidden mb-3 relative shadow-sm">
-                        <img src="/images/DSC02219-600x338.jpg" alt="Comedores" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/cat:opacity-100 transition-opacity duration-300"></div>
-                      </div>
-                      <Link href="/categoria/comedores" className="block text-center">
-                        <h4 className="font-display font-bold text-gray-900 text-base group-hover/cat:text-primary transition-colors">Comedores</h4>
-                      </Link>
-                    </div>
+                    ))}
                   </>
                 )}
 

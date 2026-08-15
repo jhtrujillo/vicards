@@ -5,13 +5,21 @@ import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-
+interface Slide {
+  image: string;
+  title1: string;
+  title2: string;
+  titleHighlight: string;
+  subtitle: string;
+  text1: string;
+  text2: string;
+}
 
 const AUTO_PLAY_INTERVAL = 5000;
 
-export default function HeroSlider({ slides }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+export default function HeroSlider({ slides }: { slides: Slide[] }) {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % slides.length);
@@ -54,7 +62,7 @@ export default function HeroSlider({ slides }) {
 
       {/* Dots Indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 flex gap-2">
-        {slides.map((_, index) => (
+        {slides.map((_, index: number) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}

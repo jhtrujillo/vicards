@@ -21,18 +21,26 @@ export const metadata: Metadata = {
   description: "Descubre la elegancia en cada rincón.",
 };
 
-export default function RootLayout({
+import { PrismaClient } from "@prisma/client";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const prisma = new PrismaClient();
+  const topCategories = await prisma.category.findMany({
+    take: 4,
+    orderBy: { products: { _count: 'desc' } }
+  });
+
   return (
     <html
       lang="es"
       className={`${montserrat.variable} ${roboto.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Header />
+        <Header categories={topCategories} />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

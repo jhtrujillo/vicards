@@ -1,15 +1,17 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface Product {
   id: number;
   name: string;
-  price: string;
+  price: number;
   image: string;
 }
 
 export default function ProductCarousel({ products }: { products: Product[] }) {
+  const router = useRouter();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isMomentum, setIsMomentum] = useState(false);
@@ -20,6 +22,7 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
   const velocityRef = useRef(0);
   const momentumRef = useRef<number | null>(null);
   const lastPosRef = useRef({ x: 0, time: 0 });
+  const hasDraggedRef = useRef(false);
 
   // Create an artificially long array to simulate infinite scrolling
   const infiniteProducts = [...products, ...products, ...products];
@@ -83,6 +86,7 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
     
     lastPosRef.current = { x: e.pageX, time: Date.now() };
     velocityRef.current = 0;
+    hasDraggedRef.current = false;
   };
 
   const handleMouseUpOrLeave = () => {
@@ -113,6 +117,9 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
     
     // Calculate movement
     const walk = (x - startX) * 2;
+    if (Math.abs(x - startX) > 5) {
+      hasDraggedRef.current = true;
+    }
     scrollRef.current.scrollLeft = scrollLeftPos - walk;
     
     // Calculate velocity
@@ -122,6 +129,12 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
       const dx = e.pageX - lastPosRef.current.x;
       velocityRef.current = dx / dt;
       lastPosRef.current = { x: e.pageX, time: now };
+    }
+  };
+
+  const handleCardClick = (id: number) => {
+    if (!hasDraggedRef.current) {
+      router.push(`/producto/${id}`);
     }
   };
 
@@ -158,28 +171,35 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
         onMouseMove={handleMouseMove}
         className={`flex overflow-x-auto gap-6 pb-8 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] select-none ${isDragging || isMomentum ? 'cursor-grabbing snap-none scroll-auto' : 'cursor-grab snap-x snap-mandatory scroll-smooth'}`}
       >
-        {infiniteProducts.map((item, index) => (
-          <div key={`${item.id}-${index}`} className="w-[85vw] sm:w-[45vw] lg:w-[280px] flex-shrink-0 snap-start bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 group/card pointer-events-none">
-            <div className="aspect-[4/3] relative overflow-hidden bg-gray-200 pointer-events-auto">
-              <img 
-                src={item.image} 
-                alt={item.name} 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110 pointer-events-none"
-                draggable={false}
-              />
-              {/* Overlay on hover */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <button className="bg-white text-gray-900 font-medium py-2 px-6 rounded-md hover:bg-[#70970A] hover:text-white transition-colors transform translate-y-4 group-hover/card:translate-y-0 duration-300">
-                  Ver Detalles
-                </button>
+        {infiniteProducts.map((item, index) => {
+          const formattedPrice = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(Number(item.price));
+          return (
+            <div 
+              key={`${item.id}-${index}`} 
+              onClick={() => handleCardClick(item.id)}
+              className="w-[85vw] sm:w-[45vw] lg:w-[280px] flex-shrink-0 snap-start bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 group/card pointer-events-auto cursor-pointer"
+            >
+              <div className="aspect-[4/3] relative overflow-hidden bg-gray-200">
+                <img 
+                  src={item.image} 
+                  alt={item.name} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110 pointer-events-none"
+                  draggable={false}
+                />
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <button className="bg-white text-gray-900 font-medium py-2 px-6 rounded-md hover:bg-[#70970A] hover:text-white transition-colors transform translate-y-4 group-hover/card:translate-y-0 duration-300">
+                    Ver Detalles
+                  </button>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="font-display font-bold text-gray-900 mb-1">{item.name}</h3>
+                <p className="text-[#70970A] font-medium">{formattedPrice}</p>
               </div>
             </div>
-            <div className="p-6 pointer-events-auto">
-              <h3 className="font-display font-bold text-gray-900 mb-1">{item.name}</h3>
-              <p className="text-[#70970A] font-medium">{item.price}</p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

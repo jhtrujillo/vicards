@@ -92,7 +92,7 @@ export default async function ProductsAdminPage({
                   <td className="py-3 px-4 font-medium text-gray-800">{product.name}</td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span className="text-sm font-medium text-gray-900">
-                      ${new Intl.NumberFormat('es-CO').format(product.price)}
+                      {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.price)}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-right">

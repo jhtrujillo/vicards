@@ -15,9 +15,43 @@ export default async function TiendaPage({
 }) {
   const resolvedParams = await searchParams;
   const q = typeof resolvedParams.q === 'string' ? resolvedParams.q : undefined;
-  const categoria = typeof resolvedParams.categoria === 'string' ? Number(resolvedParams.categoria) : undefined;
+  
+  let categoriaId: number | undefined = undefined;
+  let categoriaSlug: string | undefined = undefined;
+  let activeCategoryName = "Colecciones";
+
+  if (typeof resolvedParams.categoria === 'string') {
+    if (!isNaN(Number(resolvedParams.categoria))) {
+      categoriaId = Number(resolvedParams.categoria);
+    } else {
+      categoriaSlug = resolvedParams.categoria;
+    }
+  }
+
   const min = typeof resolvedParams.min === 'string' ? Number(resolvedParams.min) : undefined;
   const max = typeof resolvedParams.max === 'string' ? Number(resolvedParams.max) : undefined;
+
+  // Fetch categories for sidebar first to find the active one
+  const categories = await prisma.category.findMany({
+    include: {
+      _count: {
+        select: { products: true }
+      }
+    },
+    orderBy: { name: 'asc' }
+  });
+
+  // Find active category
+  if (categoriaId) {
+    const activeCat = categories.find(c => c.id === categoriaId);
+    if (activeCat) activeCategoryName = activeCat.name;
+  } else if (categoriaSlug) {
+    const activeCat = categories.find(c => c.slug === categoriaSlug);
+    if (activeCat) {
+      activeCategoryName = activeCat.name;
+      categoriaId = activeCat.id; // Resolve slug to ID for filtering
+    }
+  }
 
   // Build the Prisma WHERE clause
   const where: any = {};
@@ -25,8 +59,8 @@ export default async function TiendaPage({
   if (q) {
     where.name = { contains: q };
   }
-  if (categoria) {
-    where.categoryId = categoria;
+  if (categoriaId) {
+    where.categoryId = categoriaId;
   }
   
   if (min !== undefined || max !== undefined) {
@@ -42,16 +76,6 @@ export default async function TiendaPage({
     orderBy: { createdAt: 'desc' }
   });
 
-  // Fetch categories for sidebar
-  const categories = await prisma.category.findMany({
-    include: {
-      _count: {
-        select: { products: true }
-      }
-    },
-    orderBy: { name: 'asc' }
-  });
-
   // Fetch min/max limits for placeholders
   const aggregations = await prisma.product.aggregate({
     _min: { price: true },
@@ -62,13 +86,11 @@ export default async function TiendaPage({
 
   return (
     <main className="min-h-screen bg-[#FAFAFA] flex flex-col">
-      <Header />
-      
       {/* Banner de Página */}
       <div className="bg-[#1a1a1a] text-white pt-32 pb-16 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="font-display font-bold text-4xl md:text-5xl uppercase tracking-widest mb-4">
-            Colecciones
+            {activeCategoryName}
           </h1>
           <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-base">
             Explora nuestra cuidadosa selección de muebles diseñados para transformar tus espacios en hogares extraordinarios.
@@ -108,8 +130,6 @@ export default async function TiendaPage({
         </div>
         
       </div>
-      
-      <Footer />
     </main>
   );
 }
