@@ -92,11 +92,12 @@ export default function HeroForm({ slide }: { slide: any }) {
           <img src={slide.image} alt="Preview" className="w-16 h-16 object-cover rounded-md border" />
           <input 
             type="file" 
-            name="imageFile" 
+            name="image" 
             accept="image/*"
-            className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#70970A]/10 file:text-[#70970A] hover:file:bg-[#70970A]/20"
+            className="border border-gray-300 rounded-md px-3 py-2 w-full file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-[#70970A]/10 file:text-[#70970A] hover:file:bg-[#70970A]/20 transition-colors cursor-pointer"
           />
         </div>
+        <p className="text-xs text-gray-400 mt-1">Sube una nueva imagen solo si deseas reemplazar la actual.</p>
       </div>
 
       <div className="md:col-span-2 mt-4 flex items-center gap-4">

@@ -1,10 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +15,10 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <header 
@@ -145,7 +151,7 @@ export default function Header() {
                   <>
                     <div className="group/cat cursor-pointer">
                       <div className="aspect-[16/9] rounded-lg overflow-hidden mb-3 relative shadow-sm">
-                        <img src="http://vicards.local/wp-content/uploads/2023/12/sala.jpeg" alt="Salas" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
+                        <img src="/images/DSC02180-scaled.jpg" alt="Salas" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/cat:opacity-100 transition-opacity duration-300"></div>
                       </div>
                       <Link href="/categoria/salas" className="block text-center">
@@ -154,7 +160,7 @@ export default function Header() {
                     </div>
                     <div className="group/cat cursor-pointer">
                       <div className="aspect-[16/9] rounded-lg overflow-hidden mb-3 relative shadow-sm">
-                        <img src="http://vicards.local/wp-content/uploads/2025/04/DSC02223-600x338.jpg" alt="Alcobas" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
+                        <img src="/images/DSC02223-600x338.jpg" alt="Alcobas" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/cat:opacity-100 transition-opacity duration-300"></div>
                       </div>
                       <Link href="/categoria/alcobas" className="block text-center">
@@ -163,7 +169,7 @@ export default function Header() {
                     </div>
                     <div className="group/cat cursor-pointer">
                       <div className="aspect-[16/9] rounded-lg overflow-hidden mb-3 relative shadow-sm">
-                        <img src="http://vicards.local/wp-content/uploads/2025/04/DSC02219-600x338.jpg" alt="Comedores" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
+                        <img src="/images/DSC02219-600x338.jpg" alt="Comedores" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/cat:opacity-100 transition-opacity duration-300"></div>
                       </div>
                       <Link href="/categoria/comedores" className="block text-center">
@@ -177,7 +183,7 @@ export default function Header() {
                   <>
                     <div className="group/cat cursor-pointer col-span-2">
                       <div className="aspect-[21/9] rounded-lg overflow-hidden mb-3 relative shadow-sm">
-                        <img src="http://vicards.local/wp-content/uploads/2025/04/DSC02213-600x338.jpg" alt="Calidad" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
+                        <img src="/images/DSC02160-600x338.jpg" alt="Calidad" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/cat:opacity-100 transition-opacity duration-300"></div>
                       </div>
                       <Link href="/nosotros" className="block text-left px-2">
@@ -201,7 +207,7 @@ export default function Header() {
                   <>
                     <div className="group/cat cursor-pointer">
                       <div className="aspect-[16/9] rounded-lg overflow-hidden mb-3 relative shadow-sm">
-                        <img src="http://vicards.local/wp-content/uploads/2025/04/DSC02216-600x338.jpg" alt="Sala Principal" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
+                        <img src="/images/DSC02540-600x338.jpg" alt="Sala Principal" className="w-full h-full object-cover group-hover/cat:scale-105 transition-transform duration-700" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/cat:opacity-100 transition-opacity duration-300"></div>
                       </div>
                       <Link href="/sedes" className="block text-center">

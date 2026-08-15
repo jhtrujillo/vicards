@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, Image as ImageIcon, ShoppingBag, MapPin } from "lucide-react";
+import { LayoutDashboard, Image as ImageIcon, ShoppingBag, MapPin, Tags } from "lucide-react";
 
 export default function AdminLayout({
   children,
@@ -26,6 +26,10 @@ export default function AdminLayout({
           <Link href="/admin/productos" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-gray-800 transition-colors">
             <ShoppingBag size={20} />
             Productos
+          </Link>
+          <Link href="/admin/categorias" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-gray-800 transition-colors">
+            <Tags size={20} />
+            Categorías
           </Link>
           <Link href="/admin/salas" className="flex items-center gap-3 px-4 py-3 rounded hover:bg-gray-800 transition-colors">
             <MapPin size={20} />

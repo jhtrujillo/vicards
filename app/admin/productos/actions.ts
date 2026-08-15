@@ -7,43 +7,101 @@ import path from "path"
 
 const prisma = new PrismaClient()
 
+async function saveImage(imageFile: File | null) {
+  if (imageFile && imageFile.size > 0 && imageFile.name !== "undefined") {
+    const bytes = await imageFile.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+
+    const uniqueName = `${Date.now()}-${imageFile.name.replace(/\s+/g, '_')}`
+    const filePath = path.join(process.cwd(), "public", "images", uniqueName)
+
+    await writeFile(filePath, buffer)
+    return `/images/${uniqueName}`
+  }
+  return null
+}
+
 export async function updateProduct(formData: FormData) {
   const id = Number(formData.get("id"))
   const name = formData.get("name") as string
-  const price = formData.get("price") as string
+  const price = parseFloat(formData.get("price") as string) || 0;
   const categoryId = Number(formData.get("categoryId"))
 
-  // Objeto con los datos de texto a actualizar
   const updateData: any = {
     name,
     price,
     categoryId,
   }
 
-  // Manejo de la subida de imagen
-  const imageFile = formData.get("imageFile") as File
-  if (imageFile && imageFile.size > 0) {
-    const bytes = await imageFile.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-
-    // Crear un nombre de archivo único
-    const filename = `${Date.now()}-${imageFile.name.replace(/\s+/g, '_')}`
-    const filepath = path.join(process.cwd(), "public/images", filename)
-
-    // Guardar el archivo en public/images/
-    await writeFile(filepath, buffer)
-
-    // Agregar la nueva ruta de la imagen a los datos a actualizar
-    updateData.image = `/images/${filename}`
+  const mainImageFile = formData.get("image") as File | null
+  const imageUrl = await saveImage(mainImageFile)
+  if (imageUrl) {
+    updateData.image = imageUrl
   }
 
-  // Actualizar la base de datos
   await prisma.product.update({
     where: { id },
     data: updateData
   })
 
-  // Revalidar para que los cambios se vean en la landing de inmediato
-  revalidatePath("/")
+  // Handle gallery images
+  const galleryFiles = formData.getAll("galleryImages") as File[]
+  for (const file of galleryFiles) {
+    const galleryUrl = await saveImage(file)
+    if (galleryUrl) {
+      await prisma.productImage.create({
+        data: {
+          url: galleryUrl,
+          productId: id
+        }
+      })
+    }
+  }
+
   revalidatePath("/admin/productos")
+  revalidatePath("/")
+}
+
+export async function createProduct(formData: FormData) {
+  const name = formData.get("name") as string
+  const price = parseFloat(formData.get("price") as string) || 0;
+  const categoryId = Number(formData.get("categoryId"))
+
+  const mainImageFile = formData.get("image") as File | null
+  const imageUrl = await saveImage(mainImageFile) || ""
+
+  const newProduct = await prisma.product.create({
+    data: {
+      name,
+      price,
+      categoryId,
+      image: imageUrl
+    }
+  })
+
+  // Handle gallery images
+  const galleryFiles = formData.getAll("galleryImages") as File[]
+  for (const file of galleryFiles) {
+    const galleryUrl = await saveImage(file)
+    if (galleryUrl) {
+      await prisma.productImage.create({
+        data: {
+          url: galleryUrl,
+          productId: newProduct.id
+        }
+      })
+    }
+  }
+
+  revalidatePath("/admin/productos")
+  revalidatePath("/")
+}
+
+export async function deleteProductImage(imageId: number) {
+  await prisma.productImage.delete({
+    where: { id: imageId }
+  })
+  
+  revalidatePath("/admin/productos")
+  revalidatePath("/")
 }

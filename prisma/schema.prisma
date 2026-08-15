@@ -21,12 +21,23 @@ model HeroSlide {
 }
 
 model Product {
+  id         Int            @id @default(autoincrement())
+  name       String
+  price      Float
+  image      String
+  categoryId Int            @default(1)
+  category   Category       @relation(fields: [categoryId], references: [id])
+  images     ProductImage[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model ProductImage {
   id        Int      @id @default(autoincrement())
-  name      String
-  price     String
-  image     String
+  url       String
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Experience {
@@ -40,10 +51,11 @@ model Experience {
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  slug      String   @unique
+  slug      String    @unique
   image     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

@@ -22,22 +22,14 @@ async function saveImage(formData: FormData) {
   return null
 }
 
-export async function updateHeroSlide(formData: FormData) {
+export async function updateCategory(formData: FormData) {
   const id = Number(formData.get("id"))
-  const title1 = formData.get("title1") as string
-  const title2 = formData.get("title2") as string
-  const titleHighlight = formData.get("titleHighlight") as string
-  const subtitle = formData.get("subtitle") as string
-  const text1 = formData.get("text1") as string
-  const text2 = formData.get("text2") as string
+  const name = formData.get("name") as string
+  const slug = formData.get("slug") as string
 
   const updateData: any = {
-    title1,
-    title2,
-    titleHighlight,
-    subtitle,
-    text1,
-    text2,
+    name,
+    slug,
   }
 
   const imageUrl = await saveImage(formData)
@@ -45,11 +37,33 @@ export async function updateHeroSlide(formData: FormData) {
     updateData.image = imageUrl
   }
 
-  await prisma.heroSlide.update({
+  await prisma.category.update({
     where: { id },
     data: updateData
   })
 
-  revalidatePath("/admin/hero")
+  revalidatePath("/admin/categorias")
+  revalidatePath("/admin/productos")
+  revalidatePath("/tienda")
+  revalidatePath("/")
+}
+
+export async function createCategory(formData: FormData) {
+  const name = formData.get("name") as string
+  const slug = formData.get("slug") as string
+
+  const imageUrl = await saveImage(formData) || ""
+
+  await prisma.category.create({
+    data: {
+      name,
+      slug,
+      image: imageUrl
+    }
+  })
+
+  revalidatePath("/admin/categorias")
+  revalidatePath("/admin/productos")
+  revalidatePath("/tienda")
   revalidatePath("/")
 }
