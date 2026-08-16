@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import ProductGallery from "../../components/ProductGallery";
+import ProductCard from "../../components/ProductCard";
 import Link from "next/link";
 
 const prisma = new PrismaClient();
@@ -22,6 +23,18 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   });
 
   if (!product) return notFound();
+
+  const relatedProducts = await prisma.product.findMany({
+    where: { 
+      categoryId: product.categoryId,
+      id: { not: product.id }
+    },
+    include: {
+      category: true,
+      images: true,
+    },
+    take: 4
+  });
 
   const formattedPrice = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.price);
 
@@ -111,6 +124,21 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
 
         </div>
+
+        {/* Related Products Section */}
+        {relatedProducts.length > 0 && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
+            <h2 className="text-2xl font-display font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">
+              También podría interesarte
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map(p => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </main>
   );

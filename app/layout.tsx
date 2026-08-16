@@ -23,6 +23,8 @@ export const metadata: Metadata = {
 
 import { PrismaClient } from "@prisma/client";
 
+import WhatsAppWidget from "./components/WhatsAppWidget";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -39,10 +41,11 @@ export default async function RootLayout({
       lang="es"
       className={`${montserrat.variable} ${roboto.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col relative">
         <Header categories={topCategories} />
         <main className="flex-1">{children}</main>
         <Footer />
+        <WhatsAppWidget />
       </body>
     </html>
   );

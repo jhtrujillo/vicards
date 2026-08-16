@@ -25,7 +25,9 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
 
   return (
     <header 
-      className="w-full fixed top-0 z-50 transition-all duration-500 border-b border-white/5 shadow-lg bg-[#333333]/95 backdrop-blur-md py-2"
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        isScrolled ? "bg-[#1a1a1a]/85 backdrop-blur-md shadow-md py-2" : "bg-[#1a1a1a] py-4"
+      }`}
       onMouseLeave={() => setActiveMenu(null)}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

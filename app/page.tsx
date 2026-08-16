@@ -20,7 +20,7 @@ export default async function Home() {
 
 
       {/* Nuestros Beneficios */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-8 animate-fade-in-up">
         <div className="text-center mb-10">
           <h2 className="text-2xl md:text-3xl font-display font-bold text-[#70970A]">
             Nuestros Beneficios
@@ -29,7 +29,7 @@ export default async function Home() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-20">
           {/* Benefit 1 */}
-          <div className="bg-white px-5 py-5 rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.06)] flex items-center gap-4 transform hover:-translate-y-1 transition-transform border border-gray-50">
+          <div className="bg-white px-5 py-5 rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.06)] flex items-center gap-4 transform hover:-translate-y-1 transition-transform border border-gray-50 animate-fade-in-up delay-100">
             <div className="flex-shrink-0 w-12 h-12 rounded-full border border-[#96C11F] flex items-center justify-center bg-white shadow-sm">
               <svg className="w-5 h-5 text-[#96C11F]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V10C19 8.89543 18.1046 8 17 8H7C5.89543 8 5 8.89543 5 10V21M3 8H21M5 8L5.95116 3.24419C6.11306 2.43467 6.82488 1.85 7.64964 1.85H16.3504C17.1751 1.85 17.8869 2.43467 18.0488 3.24419L19 8M8 21V16C8 15.4477 8.44772 15 9 15H15C15.5523 15 16 15.4477 16 16V21"></path></svg>
             </div>
@@ -37,7 +37,7 @@ export default async function Home() {
           </div>
           
           {/* Benefit 2 */}
-          <div className="bg-white px-5 py-5 rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.06)] flex items-center gap-4 transform hover:-translate-y-1 transition-transform border border-gray-50">
+          <div className="bg-white px-5 py-5 rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.06)] flex items-center gap-4 transform hover:-translate-y-1 transition-transform border border-gray-50 animate-fade-in-up delay-200">
             <div className="flex-shrink-0 w-12 h-12 rounded-full border border-[#96C11F] flex items-center justify-center bg-white shadow-sm">
               <svg className="w-5 h-5 text-[#96C11F]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 3V21H21M3 16L8.5 10.5L12.5 14.5L20.5 6.5M20.5 6.5H15.5M20.5 6.5V11.5"></path></svg>
             </div>
@@ -45,7 +45,7 @@ export default async function Home() {
           </div>
           
           {/* Benefit 3 */}
-          <div className="bg-white px-5 py-5 rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.06)] flex items-center gap-4 transform hover:-translate-y-1 transition-transform border border-gray-50">
+          <div className="bg-white px-5 py-5 rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.06)] flex items-center gap-4 transform hover:-translate-y-1 transition-transform border border-gray-50 animate-fade-in-up delay-300">
             <div className="flex-shrink-0 w-12 h-12 rounded-full border border-[#96C11F] flex items-center justify-center bg-white shadow-sm">
               <svg className="w-5 h-5 text-[#96C11F]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM12 8V12L15 15"></path></svg>
             </div>
@@ -55,7 +55,7 @@ export default async function Home() {
       </div>
 
       {/* Featured Products Collection */}
-      <section className="py-20 bg-gray-50 relative overflow-hidden mt-8">
+      <section className="py-20 bg-gray-50 relative overflow-hidden mt-8 animate-fade-in-up delay-200">
         {/* Right Decorative subtle shape */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#70970A]/5 rounded-bl-[100px] pointer-events-none"></div>
 
