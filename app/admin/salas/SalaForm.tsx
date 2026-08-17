@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { updateSala, createSala } from "./actions";
 import { useRouter } from "next/navigation";
 
 export default function SalaForm({ sala = {}, isNew = false }: { sala?: any, isNew?: boolean }) {
@@ -9,32 +8,43 @@ export default function SalaForm({ sala = {}, isNew = false }: { sala?: any, isN
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsSaving(true);
     setIsSaved(false);
     
-    if (isNew) {
-      await createSala(formData);
-    } else {
-      await updateSala(formData);
-    }
+    const formData = new FormData(e.currentTarget);
+    formData.append("action", isNew ? "create" : "update");
     
-    setIsSaving(false);
-    setIsSaved(true);
-
-    if (isNew) {
-      setTimeout(() => {
-        router.push("/admin/salas");
-      }, 1500);
-    } else {
-      setTimeout(() => {
-        setIsSaved(false);
-      }, 3000);
+    try {
+        const res = await fetch('/api-php/admin_salas.php', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            setIsSaved(true);
+            setTimeout(() => {
+                setIsSaved(false);
+                if (isNew) {
+                    window.location.href = "/admin/salas";
+                } else {
+                    window.location.reload();
+                }
+            }, 1500);
+        } else {
+            alert("Error guardando");
+        }
+    } catch (err) {
+        alert("Error de conexión");
     }
+
+    setIsSaving(false);
   };
 
   return (
-    <form action={handleSubmit} className="grid grid-cols-1 gap-6 relative">
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 relative">
       {!isNew && <input type="hidden" name="id" value={sala.id} />}
       
       <div className="flex flex-col">
@@ -100,8 +110,7 @@ export default function SalaForm({ sala = {}, isNew = false }: { sala?: any, isN
         </button>
 
         {isSaved && (
-          <span className="text-[#70970A] font-medium animate-pulse flex items-center gap-2">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+          <span className="text-[#70970A] font-medium animate-pulse">
             ¡Guardado exitosamente!
           </span>
         )}

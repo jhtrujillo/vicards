@@ -102,6 +102,29 @@ export default function NosotrosPage() {
         </div>
       </section>
 
+      {/* Video Section */}
+      <section className="py-24 bg-white relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <span className="text-[#96C11F] font-bold tracking-widest uppercase text-sm mb-4 block">Detrás de escena</span>
+          <h2 className="font-display font-bold text-3xl md:text-4xl text-gray-900 mb-12">
+            Nuestra Fábrica
+          </h2>
+          <div className="rounded-2xl overflow-hidden shadow-2xl aspect-video w-full max-w-4xl mx-auto bg-black">
+            <video 
+              className="w-full h-full object-cover"
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              controls
+            >
+              <source src="/VideodeFabrica.mp4" type="video/mp4" />
+              Tu navegador no soporta el formato de video.
+            </video>
+          </div>
+        </div>
+      </section>
+
       {/* Call to Action */}
       <section className="bg-[#fdfdf7] py-24 border-t border-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

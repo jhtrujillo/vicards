@@ -1,77 +1,94 @@
-import { PrismaClient } from "@prisma/client";
+"use client"
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-const prisma = new PrismaClient();
+export default function AdminCategoriasPage() {
+  const [categories, setCategories] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function CategoriesAdminPage() {
-  const categories = await prisma.category.findMany({
-    include: {
-      products: true
+  useEffect(() => {
+    fetch('/api-php/get_categories.php')
+      .then(res => res.json())
+      .then(data => {
+        setCategories(data);
+        setLoading(false);
+      });
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("¿Eliminar categoría?")) return;
+    const formData = new FormData();
+    formData.append("action", "delete_category");
+    formData.append("id", id.toString());
+    
+    try {
+        const res = await fetch('/api-php/admin_categories.php', { method: 'POST', body: formData });
+        const data = await res.json();
+        
+        if (data.success) {
+            setCategories(categories.filter(c => c.id !== id));
+        } else {
+            alert(data.error || "Error al eliminar la categoría.");
+        }
+    } catch (err) {
+        alert("Error de conexión al intentar eliminar.");
     }
-  });
+  }
+
+  if (loading) return <div>Cargando...</div>;
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Administrar Categorías</h1>
-        <Link href="/admin/categorias/nuevo" className="bg-[#70970A] hover:bg-[#5a7a08] text-white px-4 py-2 rounded-md font-medium transition-colors">
-          + Añadir Categoría
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">Categorías</h1>
+          <p className="text-gray-500 mt-1">Gestiona las categorías de tus productos</p>
+        </div>
+        <Link 
+          href="/admin/categorias/nuevo" 
+          className="bg-[#70970A] hover:bg-[#86b014] text-white font-bold py-2 px-4 rounded flex items-center gap-2 transition-colors"
+        >
+          <span>+</span> Añadir Categoría
         </Link>
       </div>
 
-      <p className="text-gray-500 mb-8">
-        Gestiona las categorías que agrupan a tus productos.
-      </p>
-
-      {/* Tabla de Categorías */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="py-3 px-4 text-sm font-semibold text-gray-600 w-24">Imagen</th>
-              <th className="py-3 px-4 text-sm font-semibold text-gray-600">Nombre</th>
-              <th className="py-3 px-4 text-sm font-semibold text-gray-600">URL Amigable (Slug)</th>
-              <th className="py-3 px-4 text-sm font-semibold text-gray-600 text-center">Productos</th>
-              <th className="py-3 px-4 text-sm font-semibold text-gray-600 text-right">Acciones</th>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-x-auto"><table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Categoría</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
             </tr>
           </thead>
-          <tbody>
-            {categories.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="py-8 text-center text-gray-500">
-                  No hay categorías creadas.
+          <tbody className="bg-white divide-y divide-gray-200">
+            {categories.map((category) => (
+              <tr key={category.id} className="hover:bg-gray-50 transition-colors">
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex items-center">
+                    <div className="h-10 w-10 flex-shrink-0 relative rounded-md overflow-hidden bg-gray-100 border">
+                        {category.image && <img src={category.image} className="w-full h-full object-cover" />}
+                    </div>
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-gray-900">{category.name}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-900">{category.slug}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <Link href={`/admin/categorias/editar?id=${category.id}`} className="text-[#70970A] hover:text-[#5a7908] mr-4">Editar</Link>
+                  <button onClick={() => handleDelete(category.id)} className="text-red-600 hover:text-red-900">Eliminar</button>
                 </td>
               </tr>
-            ) : (
-              categories.map((category) => (
-                <tr key={category.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                  <td className="py-3 px-4">
-                    {category.image ? (
-                      <img src={category.image} alt={category.name} className="w-12 h-12 object-cover rounded shadow-sm border border-gray-200" />
-                    ) : (
-                      <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">Sin img</div>
-                    )}
-                  </td>
-                  <td className="py-3 px-4 font-medium text-gray-800">{category.name}</td>
-                  <td className="py-3 px-4 text-gray-500 text-sm">{category.slug}</td>
-                  <td className="py-3 px-4 text-center">
-                    <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded font-medium">
-                      {category.products.length}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    <Link 
-                      href={`/admin/categorias/${category.id}/editar`}
-                      className="text-[#70970A] hover:text-[#5a7a08] font-medium text-sm"
-                    >
-                      Editar
-                    </Link>
-                  </td>
-                </tr>
-              ))
+            ))}
+            {categories.length === 0 && (
+              <tr><td colSpan={3} className="px-6 py-8 text-center text-gray-500">No hay categorías.</td></tr>
             )}
           </tbody>
-        </table>
+        </table></div>
       </div>
     </div>
   );

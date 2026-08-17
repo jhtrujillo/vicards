@@ -1,0 +1,45 @@
+<?php
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+require_once 'config.php';
+
+$q = $_GET['q'] ?? '';
+$categoriaId = $_GET['categoriaId'] ?? '';
+$min = $_GET['min'] ?? '';
+$max = $_GET['max'] ?? '';
+
+$sql = 'SELECT * FROM Product WHERE 1=1';
+$params = [];
+
+if ($q !== '') {
+    $sql .= ' AND name LIKE ?';
+    $params[] = '%' . $q . '%';
+}
+if ($categoriaId !== '') {
+    $sql .= ' AND categoryId = ?';
+    $params[] = $categoriaId;
+}
+if ($min !== '') {
+    $sql .= ' AND price >= ?';
+    $params[] = $min;
+}
+if ($max !== '') {
+    $sql .= ' AND price <= ?';
+    $params[] = $max;
+}
+
+$sql .= ' ORDER BY id DESC';
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$products = $stmt->fetchAll();
+
+foreach ($products as &$p) {
+    if (empty($p['image'])) {
+        $p['image'] = '/images/placeholder.jpg';
+    }
+}
+
+echo json_encode($products);
+?>

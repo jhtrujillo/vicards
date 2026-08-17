@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 import CategoryForm from "../CategoryForm";
 
@@ -19,7 +21,7 @@ export default function NewCategoryPage() {
       </div>
 
       <div className="bg-white p-6 rounded-xl shadow-sm border border-[#70970A]/30">
-        <p className="text-sm text-gray-500 mb-6">Completa la información a continuación para añadir una categoría nueva.</p>
+        <p className="text-sm text-gray-500 mb-6">Completa la información a continuación para añadir una nueva categoría de productos.</p>
         <CategoryForm category={emptyCategory} isNew={true} />
       </div>
     </div>

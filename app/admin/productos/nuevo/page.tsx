@@ -1,19 +1,24 @@
-import { PrismaClient } from "@prisma/client";
+"use client"
+
 import Link from "next/link";
 import ProductForm from "../ProductForm";
+import { useEffect, useState } from "react";
 
-const prisma = new PrismaClient();
+export default function NewProductPage() {
+  const [categories, setCategories] = useState([]);
 
-export default async function NewProductPage() {
-  const categories = await prisma.category.findMany();
+  useEffect(() => {
+    fetch('/api-php/get_categories.php')
+      .then(res => res.json())
+      .then(data => setCategories(data));
+  }, []);
 
-  // Objeto vacío para el formulario (adaptado para creación)
   const emptyProduct = {
     id: 0,
     name: "",
     price: "",
     image: "",
-    categoryId: categories.length > 0 ? categories[0].id : 1
+    categoryId: categories.length > 0 ? (categories[0] as any).id : 1
   };
 
   return (

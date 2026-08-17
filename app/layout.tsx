@@ -3,6 +3,7 @@ import { Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import WhatsAppWidget from "./components/WhatsAppWidget";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -17,32 +18,59 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Vicars Muebles - Calidad y Diseño",
-  description: "Descubre la elegancia en cada rincón.",
+  metadataBase: new URL('https://vicarsmuebles.com'),
+  title: {
+    template: '%s | Vicards Muebles',
+    default: 'Vicards Muebles - Calidad y Diseño Excepcional',
+  },
+  description: 'Fabricantes directos de muebles de alta calidad con más de 15 años de experiencia. Transformamos espacios con mobiliario de vanguardia para tu hogar.',
+  keywords: ['muebles', 'salas', 'comedores', 'alcobas', 'muebles colombia', 'fabricantes de muebles', 'diseño interior', 'vicards muebles', 'muebles premium'],
+  openGraph: {
+    title: 'Vicards Muebles - Calidad y Diseño Excepcional',
+    description: 'Fabricantes directos de muebles de alta calidad con más de 15 años de experiencia. Transformamos espacios con mobiliario de vanguardia para tu hogar.',
+    url: 'https://vicarsmuebles.com',
+    siteName: 'Vicards Muebles',
+    locale: 'es_CO',
+    type: 'website',
+    images: [
+      {
+        url: '/logo.png',
+        width: 800,
+        height: 600,
+        alt: 'Vicards Muebles Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Vicards Muebles - Calidad y Diseño Excepcional',
+    description: 'Fabricantes directos de muebles de alta calidad con más de 15 años de experiencia.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
-import { PrismaClient } from "@prisma/client";
-
-import WhatsAppWidget from "./components/WhatsAppWidget";
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const prisma = new PrismaClient();
-  const topCategories = await prisma.category.findMany({
-    take: 4,
-    orderBy: { products: { _count: 'desc' } }
-  });
-
   return (
     <html
       lang="es"
       className={`${montserrat.variable} ${roboto.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col relative">
-        <Header categories={topCategories} />
+        <Header />
         <main className="flex-1">{children}</main>
         <Footer />
         <WhatsAppWidget />

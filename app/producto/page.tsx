@@ -1,46 +1,48 @@
-import { PrismaClient } from "@prisma/client";
-import { notFound } from "next/navigation";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import ProductGallery from "../../components/ProductGallery";
-import ProductCard from "../../components/ProductCard";
+"use client"
+
+import ProductGallery from "../components/ProductGallery";
+import ProductCard from "../components/ProductCard";
 import Link from "next/link";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
-const prisma = new PrismaClient();
+function ProductDetailContent() {
+  const searchParams = useSearchParams();
+  const id = searchParams?.get("id");
+  
+  const [product, setProduct] = useState<any>(null);
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = await params;
-  const id = Number(resolvedParams.id);
+  useEffect(() => {
+    if (!id) return;
+    
+    fetch(`/api-php/get_product.php?id=${id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+            setProduct(null);
+        } else {
+            setProduct(data);
+            // Fetch related
+            fetch(`/api-php/get_products.php?categoriaId=${data.categoryId}`)
+                .then(r => r.json())
+                .then(related => {
+                    setRelatedProducts(related.filter((p: any) => p.id !== data.id).slice(0, 4));
+                });
+        }
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [id]);
 
-  if (isNaN(id)) return notFound();
-
-  const product = await prisma.product.findUnique({
-    where: { id },
-    include: {
-      category: true,
-      images: true,
-    }
-  });
-
-  if (!product) return notFound();
-
-  const relatedProducts = await prisma.product.findMany({
-    where: { 
-      categoryId: product.categoryId,
-      id: { not: product.id }
-    },
-    include: {
-      category: true,
-      images: true,
-    },
-    take: 4
-  });
+  if (loading) return <div className="min-h-screen bg-[#FAFAFA] pt-32 text-center">Cargando producto...</div>;
+  if (!product) return <div className="min-h-screen bg-[#FAFAFA] pt-32 text-center">Producto no encontrado</div>;
 
   const formattedPrice = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(product.price);
 
   return (
-    <main className="min-h-screen bg-[#FAFAFA] flex flex-col">
-      <div className="flex-grow pt-32 pb-16">
+    <div className="flex-grow pt-32 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Breadcrumbs */}
@@ -49,7 +51,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             <span className="mx-2">/</span>
             <Link href="/tienda" className="hover:text-primary transition-colors">Tienda</Link>
             <span className="mx-2">/</span>
-            <Link href={`/tienda?categoria=${product.categoryId}`} className="hover:text-primary transition-colors">{product.category.name}</Link>
+            <Link href={`/tienda?categoria=${product.categoryId}`} className="hover:text-primary transition-colors">{product.category?.name || 'Categoría'}</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900 font-medium">{product.name}</span>
           </nav>
@@ -58,13 +60,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             
             {/* Left: Product Gallery */}
             <div className="w-full lg:w-3/5">
-              <ProductGallery mainImage={product.image} gallery={product.images} />
+              <ProductGallery mainImage={product.image} gallery={product.gallery || []} />
             </div>
 
             {/* Right: Product Info */}
             <div className="w-full lg:w-2/5 flex flex-col">
               <span className="text-primary font-bold tracking-widest uppercase text-sm mb-2 block">
-                {product.category.name}
+                {product.category?.name || 'Categoría'}
               </span>
               <h1 className="font-display font-bold text-3xl md:text-4xl text-gray-900 mb-4">
                 {product.name}
@@ -138,8 +140,16 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
         )}
-
       </div>
-    </main>
   );
+}
+
+export default function ProductDetailPage() {
+  return (
+    <main className="min-h-screen bg-[#FAFAFA] flex flex-col">
+      <Suspense fallback={<div className="min-h-screen bg-[#FAFAFA] pt-32 text-center">Cargando...</div>}>
+        <ProductDetailContent />
+      </Suspense>
+    </main>
+  )
 }

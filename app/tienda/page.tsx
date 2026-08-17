@@ -1,88 +1,50 @@
-import { PrismaClient } from "@prisma/client";
+"use client"
+
 import ProductCard from "../components/ProductCard";
 import StoreFilters from "./StoreFilters";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
-const prisma = new PrismaClient();
+function TiendaContent() {
+  const searchParams = useSearchParams();
+  const q = searchParams.get('q') || '';
+  const categoria = searchParams.get('categoria') || '';
+  const min = searchParams.get('min') || '';
+  const max = searchParams.get('max') || '';
 
-export const dynamic = "force-dynamic";
+  const [products, setProducts] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [activeCategoryName, setActiveCategoryName] = useState("Colecciones");
 
-export default async function TiendaPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}) {
-  const resolvedParams = await searchParams;
-  const q = typeof resolvedParams.q === 'string' ? resolvedParams.q : undefined;
-  
-  let categoriaId: number | undefined = undefined;
-  let categoriaSlug: string | undefined = undefined;
-  let activeCategoryName = "Colecciones";
+  useEffect(() => {
+    fetch('/api-php/get_categories.php')
+      .then(res => res.json())
+      .then(data => {
+        setCategories(data);
+        if (categoria) {
+            const cat = data.find((c: any) => c.slug === categoria || c.id == categoria);
+            if (cat) setActiveCategoryName(cat.name);
+        } else {
+            setActiveCategoryName("Colecciones");
+        }
+      });
+  }, [categoria]);
 
-  if (typeof resolvedParams.categoria === 'string') {
-    if (!isNaN(Number(resolvedParams.categoria))) {
-      categoriaId = Number(resolvedParams.categoria);
-    } else {
-      categoriaSlug = resolvedParams.categoria;
+  useEffect(() => {
+    let url = `/api-php/get_products.php?q=${encodeURIComponent(q)}&min=${min}&max=${max}`;
+    // Si tenemos categoría, necesitamos resolver si es ID o Slug (el backend PHP ahora espera categoryId o maneja lo que le enviemos)
+    // Para simplificar, si el backend espera categoryId, lo resolvemos aquí:
+    if (categoria && categories.length > 0) {
+        const cat = categories.find((c: any) => c.slug === categoria || c.id == categoria);
+        if (cat) {
+            url += `&categoriaId=${cat.id}`;
+        }
     }
-  }
-
-  const min = typeof resolvedParams.min === 'string' ? Number(resolvedParams.min) : undefined;
-  const max = typeof resolvedParams.max === 'string' ? Number(resolvedParams.max) : undefined;
-
-  // Fetch categories for sidebar first to find the active one
-  const categories = await prisma.category.findMany({
-    include: {
-      _count: {
-        select: { products: true }
-      }
-    },
-    orderBy: { name: 'asc' }
-  });
-
-  // Find active category
-  if (categoriaId) {
-    const activeCat = categories.find(c => c.id === categoriaId);
-    if (activeCat) activeCategoryName = activeCat.name;
-  } else if (categoriaSlug) {
-    const activeCat = categories.find(c => c.slug === categoriaSlug);
-    if (activeCat) {
-      activeCategoryName = activeCat.name;
-      categoriaId = activeCat.id; // Resolve slug to ID for filtering
-    }
-  }
-
-  // Build the Prisma WHERE clause
-  const where: any = {};
-  
-  if (q) {
-    where.name = { contains: q };
-  }
-  if (categoriaId) {
-    where.categoryId = categoriaId;
-  }
-  
-  if (min !== undefined || max !== undefined) {
-    where.price = {};
-    if (min !== undefined) where.price.gte = min;
-    if (max !== undefined) where.price.lte = max;
-  }
-
-  // Fetch products
-  const products = await prisma.product.findMany({
-    where,
-    include: { category: true },
-    orderBy: { createdAt: 'desc' }
-  });
-
-  // Fetch min/max limits for placeholders
-  const aggregations = await prisma.product.aggregate({
-    _min: { price: true },
-    _max: { price: true },
-  });
-  const absoluteMin = aggregations._min.price || 0;
-  const absoluteMax = aggregations._max.price || 10000000;
+    
+    fetch(url)
+      .then(res => res.json())
+      .then(data => setProducts(data));
+  }, [q, categoria, min, max, categories]);
 
   return (
     <main className="min-h-screen bg-[#FAFAFA] flex flex-col">
@@ -102,7 +64,7 @@ export default async function TiendaPage({
         
         {/* Sidebar Filters */}
         <aside className="w-full md:w-64 flex-shrink-0">
-          <StoreFilters categories={categories} minPrice={absoluteMin} maxPrice={absoluteMax} />
+          <StoreFilters categories={categories} minPrice={0} maxPrice={10000000} />
         </aside>
 
         {/* Product Grid */}
@@ -132,4 +94,12 @@ export default async function TiendaPage({
       </div>
     </main>
   );
+}
+
+export default function TiendaPage() {
+    return (
+        <Suspense fallback={<div>Cargando...</div>}>
+            <TiendaContent />
+        </Suspense>
+    )
 }

@@ -3,15 +3,22 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-export default function Header({ categories = [] }: { categories?: any[] }) {
+export default function Header() {
+  const [categories, setCategories] = useState<any[]>([]);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
+    fetch('/api-php/get_categories.php')
+      .then(res => res.json())
+      .then(data => setCategories(data.slice(0, 4)))
+      .catch(console.error);
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -50,7 +57,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
               className="relative h-full py-4 flex items-center group cursor-pointer"
               onMouseEnter={() => setActiveMenu('tienda')}
             >
-              <Link href="/tienda" className={`font-display font-bold uppercase tracking-widest text-[11px] transition-colors flex items-center gap-1.5 relative ${activeMenu === 'tienda' ? 'text-primary' : 'text-white group-hover:text-primary'}`}>
+              <Link href="/tienda" className={`font-display font-bold uppercase tracking-widest text-[13px] transition-colors flex items-center gap-1.5 relative ${activeMenu === 'tienda' ? 'text-primary' : 'text-white group-hover:text-primary'}`}>
                 Tienda
                 <svg className={`w-3.5 h-3.5 transition-transform duration-300 ${activeMenu === 'tienda' ? '-rotate-180 text-primary' : 'group-hover:-rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 <span className={`absolute -bottom-2 left-0 h-[2px] bg-primary transition-all duration-300 ${activeMenu === 'tienda' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
@@ -61,7 +68,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
               className="relative h-full py-4 flex items-center group cursor-pointer"
               onMouseEnter={() => setActiveMenu('nosotros')}
             >
-              <Link href="/nosotros" className={`font-display font-bold uppercase tracking-widest text-[11px] transition-colors flex items-center gap-1.5 relative ${activeMenu === 'nosotros' ? 'text-primary' : 'text-white group-hover:text-primary'}`}>
+              <Link href="/nosotros" className={`font-display font-bold uppercase tracking-widest text-[13px] transition-colors flex items-center gap-1.5 relative ${activeMenu === 'nosotros' ? 'text-primary' : 'text-white group-hover:text-primary'}`}>
                 Nosotros
                 <svg className={`w-3.5 h-3.5 transition-transform duration-300 ${activeMenu === 'nosotros' ? '-rotate-180 text-primary' : 'group-hover:-rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 <span className={`absolute -bottom-2 left-0 h-[2px] bg-primary transition-all duration-300 ${activeMenu === 'nosotros' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
@@ -72,7 +79,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
               className="relative h-full py-4 flex items-center group cursor-pointer"
               onMouseEnter={() => setActiveMenu('salas')}
             >
-              <Link href="/salas-de-experiencia" className={`font-display font-bold uppercase tracking-widest text-[11px] transition-colors flex items-center gap-1.5 relative ${activeMenu === 'salas' ? 'text-primary' : 'text-white group-hover:text-primary'}`}>
+              <Link href="/salas-de-experiencia" className={`font-display font-bold uppercase tracking-widest text-[13px] transition-colors flex items-center gap-1.5 relative ${activeMenu === 'salas' ? 'text-primary' : 'text-white group-hover:text-primary'}`}>
                 Salas de exp.
                 <svg className={`w-3.5 h-3.5 transition-transform duration-300 ${activeMenu === 'salas' ? '-rotate-180 text-primary' : 'group-hover:-rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                 <span className={`absolute -bottom-2 left-0 h-[2px] bg-primary transition-all duration-300 ${activeMenu === 'salas' ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
@@ -126,8 +133,12 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex justify-end">
-            <button className="text-white">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <button className="text-white p-2" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+              )}
             </button>
           </div>
         </div>
@@ -136,7 +147,7 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
       {/* Full-width Mega Menu Dropdown */}
       {activeMenu && (
         <div 
-          className="absolute top-full left-0 w-full bg-[#fdfdf7] shadow-[0_40px_100px_rgba(0,0,0,0.15)] border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-300 overflow-hidden cursor-default"
+          className="hidden md:block absolute top-full left-0 w-full bg-[#fdfdf7] shadow-[0_40px_100px_rgba(0,0,0,0.15)] border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-300 overflow-hidden cursor-default"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[380px]">
             <div className="grid grid-cols-4 gap-12 h-full">
@@ -245,6 +256,52 @@ export default function Header({ categories = [] }: { categories?: any[] }) {
               </div>
 
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden absolute top-full left-0 w-full h-[calc(100vh-70px)] bg-[#1a1a1a] z-40 overflow-y-auto border-t border-gray-800">
+          <div className="px-6 py-8 space-y-8">
+            <div className="space-y-4">
+              <Link href="/tienda" className="block text-white font-display font-bold text-xl uppercase tracking-widest border-b border-gray-800 pb-3" onClick={() => setIsMobileMenuOpen(false)}>Tienda</Link>
+              <ul className="pl-4 space-y-4 pt-2">
+                {categories.map(cat => (
+                  <li key={cat.id}>
+                    <Link href={`/tienda?categoria=${cat.id}`} className="text-gray-400 hover:text-primary transition-colors text-lg" onClick={() => setIsMobileMenuOpen(false)}>
+                      {cat.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="space-y-6 pt-6 border-t border-gray-800">
+              <Link href="/nosotros" className="block text-white font-display font-bold text-xl uppercase tracking-widest" onClick={() => setIsMobileMenuOpen(false)}>Nosotros</Link>
+              <Link href="/salas-de-experiencia" className="block text-white font-display font-bold text-xl uppercase tracking-widest" onClick={() => setIsMobileMenuOpen(false)}>Salas de Experiencia</Link>
+              <Link href="/contacto" className="block text-primary font-display font-bold text-xl uppercase tracking-widest" onClick={() => setIsMobileMenuOpen(false)}>Contacto</Link>
+            </div>
+            
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                if (searchQuery.trim()) {
+                  router.push(`/tienda?q=${encodeURIComponent(searchQuery.trim())}`);
+                  setIsMobileMenuOpen(false);
+                  setSearchQuery("");
+                }
+            }} className="pt-8 relative">
+              <input 
+                type="text" 
+                placeholder="Buscar muebles..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full border border-gray-700 bg-gray-800/50 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-primary pr-10"
+              />
+              <button type="submit" className="absolute right-3 top-11 text-gray-400 hover:text-primary">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </button>
+            </form>
           </div>
         </div>
       )}

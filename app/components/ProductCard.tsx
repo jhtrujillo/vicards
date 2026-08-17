@@ -6,7 +6,7 @@ export default function ProductCard({ product }: { product: any }) {
 
   return (
     <div className="group flex flex-col bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-      <Link href={`/producto/${product.id}`} className="relative aspect-square w-full overflow-hidden block">
+      <Link href={`/producto?id=${product.id}`} className="relative aspect-square w-full overflow-hidden block">
         <img 
           src={product.image} 
           alt={product.name} 
@@ -26,7 +26,7 @@ export default function ProductCard({ product }: { product: any }) {
         <div className="mb-1 text-xs text-gray-400 font-medium uppercase tracking-wider">
           {product.category?.name || "Muebles"}
         </div>
-        <Link href={`/producto/${product.id}`} className="block flex-grow">
+        <Link href={`/producto?id=${product.id}`} className="block flex-grow">
           <h3 className="font-display font-bold text-gray-900 text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">
             {product.name}
           </h3>

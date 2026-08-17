@@ -1,29 +1,42 @@
 "use client";
 
 import { useState } from "react";
-import { updateHeroSlide } from "./actions";
 
 export default function HeroForm({ slide }: { slide: any }) {
   const [isSaved, setIsSaved] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsSaving(true);
     setIsSaved(false);
     
-    await updateHeroSlide(formData);
+    const formData = new FormData(e.currentTarget);
+    formData.append("action", "update");
     
-    setIsSaving(false);
-    setIsSaved(true);
+    try {
+        const res = await fetch('/api-php/admin_hero.php', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+            setIsSaved(true);
+            setTimeout(() => {
+                setIsSaved(false);
+            }, 3000);
+        } else {
+            alert("Error guardando");
+        }
+    } catch (err) {
+        alert("Error de conexión");
+    }
 
-    // Ocultar mensaje después de 3 segundos
-    setTimeout(() => {
-      setIsSaved(false);
-    }, 3000);
+    setIsSaving(false);
   };
 
   return (
-    <form action={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 relative">
       <input type="hidden" name="id" value={slide.id} />
       
       <div className="flex flex-col">
@@ -100,13 +113,13 @@ export default function HeroForm({ slide }: { slide: any }) {
         <p className="text-xs text-gray-400 mt-1">Sube una nueva imagen solo si deseas reemplazar la actual.</p>
       </div>
 
-      <div className="md:col-span-2 mt-4 flex items-center gap-4">
+      <div className="md:col-span-2 mt-2 flex items-center gap-4">
         <button 
           type="submit" 
           disabled={isSaving}
           className="bg-[#1a1a1a] hover:bg-[#70970A] disabled:bg-gray-400 text-white font-medium py-2 px-6 rounded-md transition-colors"
         >
-          {isSaving ? "Guardando..." : "Guardar Cambios"}
+          {isSaving ? "Guardando..." : "Guardar Cambios del Slide"}
         </button>
 
         {isSaved && (

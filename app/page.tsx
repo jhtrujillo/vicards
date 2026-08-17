@@ -1,16 +1,21 @@
+"use client"
+
 import Link from "next/link";
 import Image from "next/image";
 import ProductCarousel from "./components/ProductCarousel";
 import FeatureCarousel from "./components/ui/feature-carousel";
 import HeroSlider from "./components/ui/HeroSlider";
-import { PrismaClient } from "@prisma/client";
 import { Truck, ShieldCheck, Leaf } from "lucide-react";
+import { useEffect, useState } from "react";
 
-const prisma = new PrismaClient();
+export default function Home() {
+  const [slides, setSlides] = useState([]);
+  const [dbProducts, setDbProducts] = useState([]);
 
-export default async function Home() {
-  const slides = await prisma.heroSlide.findMany();
-  const dbProducts = await prisma.product.findMany();
+  useEffect(() => {
+    fetch('/api-php/get_hero.php').then(res => res.json()).then(data => setSlides(data)).catch(console.error);
+    fetch('/api-php/get_products.php').then(res => res.json()).then(data => setDbProducts(data)).catch(console.error);
+  }, []);
 
   return (
     <div>
@@ -206,6 +211,33 @@ export default async function Home() {
           </div>
           
           <FeatureCarousel />
+        </div>
+      </section>
+
+      {/* Video de Fabrica Section */}
+      <section className="py-24 bg-gray-50 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-display font-bold text-gray-900 mb-4">
+              Nuestra <span className="text-[#70970A]">Fábrica</span>
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+              Conoce el proceso de creación de nuestros muebles de lujo, elaborados con pasión y dedicación.
+            </p>
+          </div>
+          <div className="rounded-2xl overflow-hidden shadow-2xl aspect-video w-full max-w-4xl mx-auto bg-black">
+            <video 
+              className="w-full h-full object-cover"
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              controls
+            >
+              <source src="/VideodeFabrica.mp4" type="video/mp4" />
+              Tu navegador no soporta el formato de video.
+            </video>
+          </div>
         </div>
       </section>
     </div>

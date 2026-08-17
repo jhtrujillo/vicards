@@ -134,7 +134,7 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
 
   const handleCardClick = (id: number) => {
     if (!hasDraggedRef.current) {
-      router.push(`/producto/${id}`);
+      router.push(`/producto?id=${id}`);
     }
   };
 
