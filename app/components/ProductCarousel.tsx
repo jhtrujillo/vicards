@@ -177,7 +177,7 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
             <div 
               key={`${item.id}-${index}`} 
               onClick={() => handleCardClick(item.id)}
-              className="w-[85vw] sm:w-[45vw] lg:w-[280px] flex-shrink-0 snap-start bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 group/card pointer-events-auto cursor-pointer"
+              className="w-[85vw] sm:w-[45vw] lg:w-[280px] flex-shrink-0 snap-center bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 group/card pointer-events-auto cursor-pointer"
             >
               <div className="aspect-[4/3] relative overflow-hidden bg-gray-200">
                 <img 
