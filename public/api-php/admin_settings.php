@@ -29,10 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     
-    if (isset($data['show_prices'])) {
+    if (isset($data['show_prices']) || array_key_exists('show_prices', $data)) {
         $val = $data['show_prices'] ? '1' : '0';
-        $stmt = $pdo->prepare("UPDATE Settings SET setting_value = ? WHERE setting_key = 'show_prices'");
-        $stmt->execute([$val]);
+        $stmt = $pdo->prepare("INSERT INTO Settings (setting_key, setting_value) VALUES ('show_prices', ?) ON DUPLICATE KEY UPDATE setting_value = ?");
+        $stmt->execute([$val, $val]);
         
         echo json_encode(['success' => true, 'show_prices' => $data['show_prices']]);
     } else {

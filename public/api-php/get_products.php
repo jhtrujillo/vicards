@@ -40,7 +40,7 @@ try {
     $setStmt = $pdo->query("SELECT setting_value FROM Settings WHERE setting_key = 'show_prices'");
     if ($setStmt) {
         $res = $setStmt->fetch();
-        if ($res && $res['setting_value'] === '0') {
+        if ($res && ($res['setting_value'] === '0' || $res['setting_value'] == 0 || $res['setting_value'] === false)) {
             $showPrices = false;
         }
     }
