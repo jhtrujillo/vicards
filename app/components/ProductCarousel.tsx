@@ -195,7 +195,9 @@ export default function ProductCarousel({ products }: { products: Product[] }) {
               </div>
               <div className="p-6">
                 <h3 className="font-display font-bold text-gray-900 mb-1">{item.name}</h3>
-                <p className="text-[#70970A] font-medium">{formattedPrice}</p>
+                {item.price !== null && item.price !== undefined && (
+                  <p className="text-[#70970A] font-medium">{formattedPrice}</p>
+                )}
               </div>
             </div>
           );

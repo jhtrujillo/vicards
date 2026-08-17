@@ -32,5 +32,22 @@ $galStmt = $pdo->prepare('SELECT * FROM ProductImage WHERE productId = ?');
 $galStmt->execute([$id]);
 $product['gallery'] = $galStmt->fetchAll() ?: [];
 
+$showPrices = true;
+try {
+    $setStmt = $pdo->query("SELECT setting_value FROM Settings WHERE setting_key = 'show_prices'");
+    if ($setStmt) {
+        $res = $setStmt->fetch();
+        if ($res && $res['setting_value'] === '0') {
+            $showPrices = false;
+        }
+    }
+} catch (Exception $e) {
+    // Ignore if table doesn't exist yet
+}
+
+if (!$showPrices) {
+    $product['price'] = null;
+}
+
 echo json_encode($product);
 ?>

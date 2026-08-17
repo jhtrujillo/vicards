@@ -31,8 +31,12 @@ export default function ProductCard({ product }: { product: any }) {
             {product.name}
           </h3>
         </Link>
-        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
-          <span className="font-bold text-gray-900">{formattedPrice}</span>
+        <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between min-h-[50px]">
+          {product.price !== null && product.price !== undefined ? (
+            <span className="font-bold text-gray-900">{formattedPrice}</span>
+          ) : (
+            <span className="font-bold text-gray-400 text-sm"></span>
+          )}
         </div>
       </div>
     </div>

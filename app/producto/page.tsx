@@ -68,14 +68,14 @@ function ProductDetailContent() {
               <span className="text-primary font-bold tracking-widest uppercase text-sm mb-2 block">
                 {product.category?.name || 'Categoría'}
               </span>
-              <h1 className="font-display font-bold text-3xl md:text-4xl text-gray-900 mb-4">
-                {product.name}
-              </h1>
+              <h1 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">{product.name}</h1>
               
-              <div className="text-2xl text-gray-900 font-light mb-8">
-                {formattedPrice}
-              </div>
-
+              {product.price !== null && product.price !== undefined && (
+                <div className="text-2xl font-bold text-[#96C11F] mb-6">
+                  {formattedPrice}
+                </div>
+              )}
+              
               <div className="prose prose-sm text-gray-600 mb-8">
                 <p>
                   Mueble de alta calidad con acabados premium. Nuestro proceso de diseño y fabricación garantiza durabilidad y estilo atemporal para tu hogar.

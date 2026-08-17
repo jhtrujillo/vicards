@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { LayoutDashboard, Image as ImageIcon, ShoppingBag, MapPin, Tags, Menu, X } from "lucide-react";
+import { LayoutDashboard, Image as ImageIcon, ShoppingBag, MapPin, Tags, Menu, X, Settings } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
@@ -26,6 +26,7 @@ export default function AdminLayout({
     { href: "/admin/productos", icon: ShoppingBag, label: "Productos" },
     { href: "/admin/categorias", icon: Tags, label: "Categorías" },
     { href: "/admin/salas", icon: MapPin, label: "Salas de Experiencia" },
+    { href: "/admin/configuracion", icon: Settings, label: "Configuración" },
   ];
 
   return (

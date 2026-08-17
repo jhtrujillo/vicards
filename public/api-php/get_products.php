@@ -35,9 +35,25 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $products = $stmt->fetchAll();
 
+$showPrices = true;
+try {
+    $setStmt = $pdo->query("SELECT setting_value FROM Settings WHERE setting_key = 'show_prices'");
+    if ($setStmt) {
+        $res = $setStmt->fetch();
+        if ($res && $res['setting_value'] === '0') {
+            $showPrices = false;
+        }
+    }
+} catch (Exception $e) {
+    // Ignore if table doesn't exist yet
+}
+
 foreach ($products as &$p) {
     if (empty($p['image'])) {
         $p['image'] = '/images/placeholder.jpg';
+    }
+    if (!$showPrices) {
+        $p['price'] = null;
     }
 }
 
