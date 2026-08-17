@@ -118,7 +118,7 @@ export default function NosotrosPage() {
               playsInline 
               controls
             >
-              <source src="/VideodeFabrica.mp4" type="video/mp4" />
+              <source src="/images/VideodeFabrica.mp4" type="video/mp4" />
               Tu navegador no soporta el formato de video.
             </video>
           </div>
