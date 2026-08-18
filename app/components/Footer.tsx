@@ -51,19 +51,24 @@ export default function Footer() {
               <span className="text-gray-900 font-bold text-sm">Síguenos</span>
               <div className="flex space-x-3">
                 {/* WhatsApp */}
-                <a href="#" className="w-8 h-8 rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                <a href="https://wa.me/573160180007" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
                   <span className="sr-only">WhatsApp</span>
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.125-.397-.179-.974-.396-1.996-1.428-1.008-1.02-1.226-1.745-1.266-1.921-.04-.176-.017-.384.116-.547.114-.14.24-.265.341-.39.103-.125.137-.215.205-.357.069-.143.034-.267-.017-.37-.052-.102-.457-1.102-.626-1.509-.166-.395-.333-.342-.457-.348-.12-.005-.258-.005-.395-.005-.138 0-.361.052-.55.258-.189.206-.723.707-.723 1.724 0 1.018.74 2.001.843 2.14.103.138 1.432 2.247 3.535 3.09.5.201.89.32 1.196.41.504.148.963.127 1.326.077.41-.056 1.258-.514 1.436-1.011.177-.497.177-.923.124-1.011-.052-.089-.189-.142-.395-.246z"/></svg>
                 </a>
                 {/* Facebook */}
-                <a href="#" className="w-8 h-8 rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                <a href="https://www.facebook.com/share/1JfFHHXbRp/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
                   <span className="sr-only">Facebook</span>
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
                 </a>
                 {/* Instagram */}
-                <a href="#" className="w-8 h-8 rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                <a href="https://www.instagram.com/vicars_muebles?igsi=NzBscW5jcWFmbmJq" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
                   <span className="sr-only">Instagram</span>
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                {/* TikTok */}
+                <a href="https://www.tiktok.com/@_vicars.muebles?_r=1&_t=ZS-98zg40j4L4O" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                  <span className="sr-only">TikTok</span>
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.01.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v7.2c0 1.96-.64 3.96-1.87 5.48-1.2 1.48-3.03 2.5-4.96 2.87-1.92.36-4.04.14-5.83-.8-1.78-.93-3.21-2.52-3.86-4.43-.65-1.91-.49-4.11.39-5.91.89-1.8 2.5-3.32 4.41-4.01 1.9-.69 4.09-.59 5.92.21v4.13c-.92-.47-2.02-.63-3.04-.44-1.02.19-1.93.76-2.55 1.56-.63.8-.93 1.86-.81 2.88.11 1.02.66 1.95 1.46 2.56.8.61 1.84.9 2.86.81 1.02-.09 1.95-.62 2.62-1.37.67-.74 1.05-1.74 1.05-2.76V0h2.4z"/></svg>
                 </a>
               </div>
             </div>
