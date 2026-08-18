@@ -96,9 +96,9 @@ export default function Home() {
             <p className="text-gray-600">Encuentra el estilo perfecto para cada espacio de tu hogar</p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             {categories.filter(c => c.isFeatured == 1 || c.isFeatured === true).map((category) => (
-              <Link key={category.id} href={`/tienda?categoria=${category.slug}`} className="group relative h-80 rounded-lg overflow-hidden block">
+              <Link key={category.id} href={`/tienda?categoria=${category.slug}`} className="group relative h-80 w-full sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] rounded-lg overflow-hidden block">
                 <img 
                   src={category.image} 
                   alt={category.name} 
