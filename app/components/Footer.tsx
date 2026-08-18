@@ -38,10 +38,12 @@ export default function Footer() {
             </div>
 
             {/* 3. Contact Info */}
-            <div className="flex flex-col space-y-1 text-gray-600 text-sm font-medium">
+            <div className="flex flex-col space-y-2 text-gray-600 text-sm font-medium">
               <a href="tel:3160180007" className="hover:text-primary transition-colors">316 0180007</a>
-              <a href="mailto:servicioalcliente@vicars.com" className="hover:text-primary transition-colors">servicioalcliente@vicars.com</a>
-              <span>Calle 44 No. 4E -13. Cali, Valle.</span>
+              <a href="mailto:servicioalcliente@vicars.com" className="hover:text-primary transition-colors mb-2">servicioalcliente@vicars.com</a>
+              <span><strong className="text-gray-800">C. Jardín:</strong> Calle 16 No. 100A - 35</span>
+              <span><strong className="text-gray-800">Las Delicias:</strong> Calle 44 No. 4E - 13</span>
+              <span><strong className="text-gray-800">Alianza:</strong> Calle 44 No. 1D2 - 25Norte</span>
             </div>
 
             {/* 4. Social Links */}

@@ -11,21 +11,21 @@ const FEATURES = [
     label: "Alianza",
     icon: MapPin,
     image: "/images/DSC02160-600x338.jpg",
-    description: "Sede Alianza",
+    description: "Calle 44 No. 1D2 - 25Norte B// Alianza",
   },
   {
     id: "cra-5",
-    label: "Cra 5",
+    label: "Las Delicias",
     icon: MapPin,
     image: "/images/DSC02219-600x338.jpg",
-    description: "Sede Cra 5",
+    description: "Calle 44 No. 4E - 13. B// Las delicias",
   },
   {
     id: "ciudad-jardin",
     label: "Ciudad Jardín",
     icon: MapPin,
     image: "/images/DSC02223-600x338.jpg",
-    description: "Sede Ciudad Jardín",
+    description: "Calle 16 No. 100A - 35. B// Ciudad Jardín",
   },
 ];
 

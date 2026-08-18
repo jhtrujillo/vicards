@@ -50,12 +50,12 @@ export default function ContactoPage() {
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg mb-1">Visítanos</h3>
-                    <p className="text-gray-400 leading-relaxed">
-                      Calle 44 No. 4E -13<br />
-                      Cali, Valle del Cauca<br />
-                      Colombia
-                    </p>
+                    <h3 className="font-bold text-lg mb-2">Nuestras Sedes</h3>
+                    <div className="text-gray-400 leading-relaxed text-sm space-y-2">
+                      <p><strong className="text-white">Ciudad Jardín:</strong><br/>Calle 16 No. 100A - 35</p>
+                      <p><strong className="text-white">Las Delicias:</strong><br/>Calle 44 No. 4E - 13</p>
+                      <p><strong className="text-white">Alianza:</strong><br/>Calle 44 No. 1D2 - 25Norte</p>
+                    </div>
                   </div>
                 </div>
 
