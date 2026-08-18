@@ -39,7 +39,7 @@ export default function Footer() {
 
             {/* 3. Contact Info */}
             <div className="flex flex-col space-y-2 text-gray-600 text-sm font-medium">
-              <a href="tel:3160180007" className="hover:text-primary transition-colors">316 0180007</a>
+              <a href="tel:+573113791524" className="hover:text-primary transition-colors">+57 311 3791524</a>
               <a href="mailto:servicioalcliente@vicars.com" className="hover:text-primary transition-colors mb-2">servicioalcliente@vicars.com</a>
               <span><strong className="text-gray-800">C. Jardín:</strong> Calle 16 No. 100A - 35</span>
               <span><strong className="text-gray-800">Las Delicias:</strong> Calle 44 No. 4E - 13</span>
@@ -51,7 +51,7 @@ export default function Footer() {
               <span className="text-gray-900 font-bold text-sm">Síguenos</span>
               <div className="flex space-x-3">
                 {/* WhatsApp */}
-                <a href="https://wa.me/573160180007" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                <a href="https://wa.me/573113791524" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full border-2 border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
                   <span className="sr-only">WhatsApp</span>
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.125-.397-.179-.974-.396-1.996-1.428-1.008-1.02-1.226-1.745-1.266-1.921-.04-.176-.017-.384.116-.547.114-.14.24-.265.341-.39.103-.125.137-.215.205-.357.069-.143.034-.267-.017-.37-.052-.102-.457-1.102-.626-1.509-.166-.395-.333-.342-.457-.348-.12-.005-.258-.005-.395-.005-.138 0-.361.052-.55.258-.189.206-.723.707-.723 1.724 0 1.018.74 2.001.843 2.14.103.138 1.432 2.247 3.535 3.09.5.201.89.32 1.196.41.504.148.963.127 1.326.077.41-.056 1.258-.514 1.436-1.011.177-.497.177-.923.124-1.011-.052-.089-.189-.142-.395-.246z"/></svg>
                 </a>

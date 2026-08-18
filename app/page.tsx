@@ -138,7 +138,7 @@ export default function Home() {
               Disponemos de un equipo altamente capacitado y comprometido, listo para brindarle asistencia y apoyo personalizado.
             </p>
             <a 
-              href="https://wa.me/1234567890" 
+              href="https://wa.me/573113791524" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#96C11F] hover:bg-[#85ab1b] text-white font-medium py-3 px-8 rounded-md transition-colors"

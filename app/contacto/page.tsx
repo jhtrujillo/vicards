@@ -66,7 +66,7 @@ export default function ContactoPage() {
                   <div>
                     <h3 className="font-bold text-lg mb-1">Llámanos</h3>
                     <p className="text-gray-400">
-                      <a href="tel:3160180007" className="hover:text-white transition-colors">316 0180007</a>
+                      <a href="tel:+573113791524" className="hover:text-white transition-colors">+57 311 3791524</a>
                     </p>
                   </div>
                 </div>
@@ -103,7 +103,7 @@ export default function ContactoPage() {
                 También puedes escribirnos directamente por WhatsApp para una atención más rápida y personalizada.
               </p>
               <a 
-                href="https://wa.me/573160180007" 
+                href="https://wa.me/573113791524" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="mt-4 inline-flex items-center gap-2 text-[#96C11F] font-bold hover:text-white transition-colors"
