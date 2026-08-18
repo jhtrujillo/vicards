@@ -71,7 +71,14 @@ export default function AdminCategoriasPage() {
                         {category.image && <img src={category.image} className="w-full h-full object-cover" />}
                     </div>
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">{category.name}</div>
+                      <div className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                        {category.name}
+                        {(category.isFeatured == 1 || category.isFeatured === true) && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#70970A]/10 text-[#70970A]">
+                            En inicio
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </td>

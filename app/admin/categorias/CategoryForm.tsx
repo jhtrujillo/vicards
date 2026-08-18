@@ -67,6 +67,19 @@ export default function CategoryForm({ category = {}, isNew = false }: { categor
       </div>
 
       <div className="flex flex-col md:col-span-2">
+        <label className="flex items-center gap-2 cursor-pointer mt-2 mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
+          <input 
+            type="checkbox" 
+            name="isFeatured" 
+            value="1"
+            defaultChecked={category.isFeatured == 1 || category.isFeatured === true} 
+            className="w-5 h-5 text-[#70970A] rounded border-gray-300 focus:ring-[#70970A] cursor-pointer"
+          />
+          <span className="text-sm font-medium text-gray-800">Mostrar en la página de inicio (Sección "Explora Nuestras Categorías")</span>
+        </label>
+      </div>
+
+      <div className="flex flex-col md:col-span-2">
         <label className="text-sm font-medium text-gray-700 mb-1">{isNew ? "Subir Imagen de Categoría" : "Cambiar Imagen de Categoría"}</label>
         <div className="flex items-center gap-4">
           {!isNew && category.image && (

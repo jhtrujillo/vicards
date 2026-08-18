@@ -11,10 +11,12 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [slides, setSlides] = useState([]);
   const [dbProducts, setDbProducts] = useState([]);
+  const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
     fetch('/api-php/get_hero.php').then(res => res.json()).then(data => setSlides(data)).catch(console.error);
     fetch('/api-php/get_products.php').then(res => res.json()).then(data => setDbProducts(data)).catch(console.error);
+    fetch('/api-php/get_categories.php').then(res => res.json()).then(data => setCategories(data)).catch(console.error);
   }, []);
 
   return (
@@ -95,58 +97,23 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Categoria 1 */}
-            <Link href="/tienda?categoria=salas" className="group relative h-80 rounded-lg overflow-hidden block">
-              <img 
-                src="/images/DSC02160-600x338.jpg" 
-                alt="Salas" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-white text-2xl font-display font-bold tracking-wider">SALAS</h3>
-              </div>
-            </Link>
-
-            {/* Categoria 2 */}
-            <Link href="/tienda?categoria=comedores" className="group relative h-80 rounded-lg overflow-hidden block">
-              <img 
-                src="/images/DSC02219-600x338.jpg" 
-                alt="Comedores" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-white text-2xl font-display font-bold tracking-wider">COMEDORES</h3>
-              </div>
-            </Link>
-
-            {/* Categoria 3 */}
-            <Link href="/tienda?categoria=alcobas" className="group relative h-80 rounded-lg overflow-hidden block">
-              <img 
-                src="/images/DSC02223-600x338.jpg" 
-                alt="Alcobas" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-white text-2xl font-display font-bold tracking-wider">ALCOBAS</h3>
-              </div>
-            </Link>
-
-            {/* Categoria 4 */}
-            <Link href="/tienda?categoria=decoracion" className="group relative h-80 rounded-lg overflow-hidden block">
-              <img 
-                src="/images/DSC02540-600x338.jpg" 
-                alt="Decoración" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h3 className="text-white text-2xl font-display font-bold tracking-wider">DECORACIÓN</h3>
-              </div>
-            </Link>
+            {categories.filter(c => c.isFeatured == 1 || c.isFeatured === true).map((category) => (
+              <Link key={category.id} href={`/tienda?categoria=${category.slug}`} className="group relative h-80 rounded-lg overflow-hidden block">
+                <img 
+                  src={category.image} 
+                  alt={category.name} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h3 className="text-white text-2xl font-display font-bold tracking-wider uppercase">{category.name}</h3>
+                </div>
+              </Link>
+            ))}
           </div>
+          {categories.filter(c => c.isFeatured == 1 || c.isFeatured === true).length === 0 && (
+            <p className="text-center text-gray-500 mt-8">No hay categorías destacadas configuradas.</p>
+          )}
         </div>
       </section>
 

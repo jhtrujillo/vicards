@@ -23,15 +23,21 @@ function saveImage($fileInfo) {
     return null;
 }
 
+// Intentar crear la columna isFeatured si no existe
+try {
+    $pdo->exec("ALTER TABLE Category ADD COLUMN isFeatured BOOLEAN DEFAULT FALSE");
+} catch (Exception $e) {}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'create') {
         $name = $_POST['name'] ?? '';
         $slug = $_POST['slug'] ?? '';
+        $isFeatured = isset($_POST['isFeatured']) && $_POST['isFeatured'] === '1' ? 1 : 0;
         
         $imageUrl = saveImage($_FILES['image'] ?? null) ?: '';
 
-        $stmt = $pdo->prepare('INSERT INTO Category (name, slug, image, updatedAt) VALUES (?, ?, ?, NOW())');
-        $stmt->execute([$name, $slug, $imageUrl]);
+        $stmt = $pdo->prepare('INSERT INTO Category (name, slug, image, isFeatured, updatedAt) VALUES (?, ?, ?, ?, NOW())');
+        $stmt->execute([$name, $slug, $imageUrl, $isFeatured]);
         
         echo json_encode(['success' => true]);
         exit;
@@ -41,15 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = intval($_POST['id']);
         $name = $_POST['name'] ?? '';
         $slug = $_POST['slug'] ?? '';
+        $isFeatured = isset($_POST['isFeatured']) && $_POST['isFeatured'] === '1' ? 1 : 0;
 
         $imageUrl = saveImage($_FILES['image'] ?? null);
 
         if ($imageUrl) {
-            $stmt = $pdo->prepare('UPDATE Category SET name = ?, slug = ?, image = ?, updatedAt = NOW() WHERE id = ?');
-            $stmt->execute([$name, $slug, $imageUrl, $id]);
+            $stmt = $pdo->prepare('UPDATE Category SET name = ?, slug = ?, image = ?, isFeatured = ?, updatedAt = NOW() WHERE id = ?');
+            $stmt->execute([$name, $slug, $imageUrl, $isFeatured, $id]);
         } else {
-            $stmt = $pdo->prepare('UPDATE Category SET name = ?, slug = ?, updatedAt = NOW() WHERE id = ?');
-            $stmt->execute([$name, $slug, $id]);
+            $stmt = $pdo->prepare('UPDATE Category SET name = ?, slug = ?, isFeatured = ?, updatedAt = NOW() WHERE id = ?');
+            $stmt->execute([$name, $slug, $isFeatured, $id]);
         }
 
         echo json_encode(['success' => true]);
