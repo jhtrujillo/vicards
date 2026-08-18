@@ -7,32 +7,25 @@ import { cn } from "@/lib/utils";
 
 const FEATURES = [
   {
-    id: "cali",
-    label: "Cali",
+    id: "alianza",
+    label: "Alianza",
     icon: MapPin,
     image: "/images/DSC02160-600x338.jpg",
-    description: "Sala de experiencia no.1 - Cali",
+    description: "Sede Alianza",
   },
   {
-    id: "palmira",
-    label: "Palmira",
+    id: "cra-5",
+    label: "Cra 5",
     icon: MapPin,
     image: "/images/DSC02219-600x338.jpg",
-    description: "Sala de experencia no.5 - Palmira",
+    description: "Sede Cra 5",
   },
   {
-    id: "bogota",
-    label: "Bogotá",
+    id: "ciudad-jardin",
+    label: "Ciudad Jardín",
     icon: MapPin,
     image: "/images/DSC02223-600x338.jpg",
-    description: "Sala de experiencia VIP - Bogotá",
-  },
-  {
-    id: "medellin",
-    label: "Medellín",
-    icon: MapPin,
-    image: "/images/DSC02540-600x338.jpg",
-    description: "Sala de diseño moderno - Medellín",
+    description: "Sede Ciudad Jardín",
   },
 ];
 
